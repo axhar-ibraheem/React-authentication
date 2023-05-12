@@ -16,31 +16,41 @@ const AuthForm = () => {
     e.preventDefault();
     const enteredEmail = emailRef.current.value;
     const enteredPassword = passwordRef.current.value;
+    try {
+      let endPointUrl;
+      if (isLogin) {
+        endPointUrl =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBezG9y2vzN3ZEoEkEMYo68vi3GYFkJ99Q";
+      } else {
+        endPointUrl =
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBezG9y2vzN3ZEoEkEMYo68vi3GYFkJ99Q";
+      }
+      const response = await fetch(endPointUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (isLogin) {
-    } else {
-      const response = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBezG9y2vzN3ZEoEkEMYo68vi3GYFkJ99Q",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: enteredEmail,
-            password: enteredPassword,
-            returnSecureToken: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const data = await response.json();
 
       if (response.ok) {
+        console.log(data.idToken);
       } else {
-        alert("email already exits");
+        const errorMessage = data.error.message;
+        throw new Error(errorMessage);
       }
-      setIsLoading(false);
+    } catch (e) {
+      alert(e.message);
     }
+    setIsLoading(false);
   };
+
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? "Login" : "Sign Up"}</h1>
