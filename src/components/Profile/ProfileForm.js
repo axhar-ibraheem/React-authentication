@@ -25,7 +25,7 @@ const ProfileForm = () => {
       },
     });
     if (response.ok) {
-      history.push("/auth");
+      history.replace("/auth");
     }
     const data = await response.json();
   };
