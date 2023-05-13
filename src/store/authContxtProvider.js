@@ -4,16 +4,25 @@ import AuthContext from "./authContxt";
 const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const [token, setToken] = useState(initialToken);
-
   const isLoggedIn = !!token;
-  const loginHandler = (token) => {
-    localStorage.setItem("token", token);
-    setToken(token);
-  };
+  let timer;
 
   const logoutHandler = () => {
     setToken("");
     localStorage.removeItem("token");
+    clearTimeout(timer);
+  };
+
+  const logoutAfterFiveMinutes = () => {
+    timer = setTimeout(() => {
+      logoutHandler();
+    }, 300000);
+  };
+
+  const loginHandler = (token) => {
+    localStorage.setItem("token", token);
+    setToken(token);
+    logoutAfterFiveMinutes();
   };
 
   const context = {
