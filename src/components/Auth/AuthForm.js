@@ -21,11 +21,9 @@ const AuthForm = () => {
     try {
       let endPointUrl;
       if (isLogin) {
-        endPointUrl =
-          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBezG9y2vzN3ZEoEkEMYo68vi3GYFkJ99Q";
+        endPointUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${ctx.apiKey}`;
       } else {
-        endPointUrl =
-          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBezG9y2vzN3ZEoEkEMYo68vi3GYFkJ99Q";
+        endPointUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${ctx.apiKey}`;
       }
       const response = await fetch(endPointUrl, {
         method: "POST",
@@ -43,7 +41,6 @@ const AuthForm = () => {
 
       if (response.ok) {
         ctx.login(data.idToken);
-       
       } else {
         const errorMessage = data.error.message;
         throw new Error(errorMessage);

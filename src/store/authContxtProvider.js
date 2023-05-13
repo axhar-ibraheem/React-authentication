@@ -14,10 +14,11 @@ const AuthContextProvider = (props) => {
   };
 
   const context = {
-    idToken: "",
+    idToken: token,
     isLoggedIn: isLoggedIn,
     login: loginHandler,
     logout: logoutHandler,
+    apiKey: "AIzaSyBezG9y2vzN3ZEoEkEMYo68vi3GYFkJ99Q",
   };
 
   return (
